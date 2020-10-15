@@ -10,8 +10,6 @@ in pkgs.dockerTools.buildImage {
   created = "now";
 
   contents = with pkgs; [
-    busybox
-    bash
     (python3.withPackages deps)
     ./web
   ];

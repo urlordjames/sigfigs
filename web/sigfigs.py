@@ -1,14 +1,19 @@
-from flask import Flask, request
+from flask import Flask, request, send_file
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return "bruh"
+    return send_file("static/index.html")
 
-@app.route("/figures")
+# dumb hack for development, override in production
+@app.route("/calculate.js")
+def calc():
+    return send_file("static/calculate.js")
+
+@app.route("/figures", methods=["POST"])
 def signums():
-    number = request.args["number"]
+    number = request.json["number"]
     dots = number.count(".")
     if dots > 1:
         return "invalid number", 400
@@ -27,7 +32,6 @@ def figs(number, hasdot):
     if hasdot:
         return len(number) - 1
     for i in range(len(number) - 1, 0, -1):
-        print(i)
         if number[i] != "0":
             number = number[:i + 1]
             break
