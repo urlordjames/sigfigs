@@ -2,6 +2,8 @@ from flask import Flask, request, send_file
 
 app = Flask(__name__)
 
+digits = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
 @app.route("/")
 def index():
     return send_file("static/index.html")
@@ -17,18 +19,20 @@ def signums():
     dots = number.count(".")
     if dots > 1:
         return "invalid number", 400
+    if len(number) > 50:
+        return "too many digits, request refused", 431
     return {"figs": figs(number, dots == 1)}
 
 def figs(number, hasdot):
     for i, char in enumerate(number):
-        if char != "0" and char != ".":
+        if char in digits:
             number = number[i:]
             break
-    print(number)
+    number = number.replace(".", "")
     if hasdot:
-        return len(number.replace(".", ""))
-    for i in range(len(number) - 1, 0, -1):
-        if number[i] != "0":
+        return len(number)
+    for i in range(len(number) - 1, -1, -1):
+        if number[i] in digits:
             number = number[:i + 1]
             break
     return len(number)
