@@ -19,18 +19,14 @@ def signums():
         return "invalid number", 400
     return {"figs": figs(number, dots == 1)}
 
-def firstoccurence(string, find):
-    for i, char in enumerate(string):
-        if char == find:
-            return i
-
 def figs(number, hasdot):
     for i, char in enumerate(number):
-        if char != "0":
+        if char != "0" and char != ".":
             number = number[i:]
             break
+    print(number)
     if hasdot:
-        return len(number) - 1
+        return len(number.replace(".", ""))
     for i in range(len(number) - 1, 0, -1):
         if number[i] != "0":
             number = number[:i + 1]
